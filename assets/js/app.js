@@ -13,3 +13,11 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
+import {sampler} from "./piano"
+
+// TODO: feed in from socket here
+// TODO: how to await sampler ready?
+setTimeout(() => {
+  sampler.triggerAttack("C4")
+  setTimeout(() => sampler.triggerRelease("C4"), 500)
+}, 2000)
