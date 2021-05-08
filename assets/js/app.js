@@ -43,14 +43,14 @@ const sampler = new Tone.Sampler({
 
 channel.on("noteon", payload => {
   const { note, time } = payload
-  console.log({event: "recv:noteon", name: note.name, note: note})
+  console.log({event: "recv:noteon", name: note.name, note, time})
   sampler.triggerAttack(note.name, time, note.velocity)
 })
 
 channel.on("noteoff", payload => {
   const { note, time } = payload
-  console.log({event: "recv:noteoff", name: note.name, note: note})
-  sampler.triggerRelease(note.name, time, note.velocity)
+  console.log({event: "recv:noteoff", name: note.name, note, time})
+  sampler.triggerRelease(note.name, time)
 })
 
 const pushNote = (eventSuffix) => {
