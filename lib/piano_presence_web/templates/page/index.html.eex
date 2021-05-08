@@ -1,2 +1,11 @@
-<tone-loader></tone-loader>
-<div id="piano"></div>
+<style>
+    tone-piano {
+        margin-bottom: 10px;
+    }
+</style>
+<tone-example>
+    <tone-loader></tone-loader>
+
+    <div id="piano">
+    </div>
+</tone-example>

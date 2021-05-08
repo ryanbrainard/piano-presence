@@ -1,6 +1,7 @@
 import "../css/app.scss"
 import * as Tone from "tone"
 import {piano} from "./tonejs-ui/src/gui"
+import _ from "./tonejs-ui/src/components"
 import {socket} from "./socket"
 import "phoenix_html"
 
