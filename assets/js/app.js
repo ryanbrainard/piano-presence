@@ -42,25 +42,28 @@ const sampler = new Tone.Sampler({
 }).toDestination();
 
 channel.on("noteon", payload => {
-  const { note } = payload
+  const { note, time } = payload
   console.log({event: "recv:noteon", name: note.name, note: note})
-  sampler.triggerAttack(payload.note.name)
+  sampler.triggerAttack(note.name, time, note.velocity)
 })
 
 channel.on("noteoff", payload => {
-  const { note } = payload
+  const { note, time } = payload
   console.log({event: "recv:noteoff", name: note.name, note: note})
-  sampler.triggerRelease(payload.note.name)
+  sampler.triggerRelease(note.name, time, note.velocity)
 })
+
+const pushNote = (eventSuffix) => {
+  return (note) => {
+    const time = Tone.now()
+    const event = "note" + eventSuffix
+    console.log({event: "push:" + event, name: note.name, note, time})
+    channel.push(event, {note, time})
+  }
+}
 
 piano({
   parent: document.querySelector("#piano"),
-  noteon: (note) => {
-    console.log({event: "push:noteon", name: note.name, note: note})
-    channel.push("noteon", {note})
-  },
-  noteoff: (note) => {
-    console.log({event: "push:noteoff", name: note.name, note: note})
-    channel.push("noteoff", {note})
-  },
+  noteon: pushNote("on"),
+  noteoff: pushNote("off"),
 });

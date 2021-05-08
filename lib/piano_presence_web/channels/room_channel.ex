@@ -8,13 +8,8 @@ defmodule PianoPresenceWeb.RoomChannel do
     {:error, %{reason: "unauthorized"}}
   end
 
-
-  def handle_in("noteon", %{"note" => note}, socket) do
-    broadcast!(socket, "noteon", %{note: note})
-    {:noreply, socket}
-  end
-  def handle_in("noteoff", %{"note" => note}, socket) do
-    broadcast!(socket, "noteoff", %{note: note})
+  def handle_in("note" <> _ = event, params, socket) do
+    broadcast!(socket, event, params)
     {:noreply, socket}
   end
 end
