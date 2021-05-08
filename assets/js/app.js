@@ -1,8 +1,18 @@
 import "../css/app.scss"
 import * as Tone from "tone"
 import {piano} from "./tonejs-ui/src/gui"
-import {channel} from "./socket"
+import {socket} from "./socket"
 import "phoenix_html"
+
+let offset = 0
+
+let channel = socket.channel("room:lobby", {})
+channel.join()
+  .receive("ok", resp => {
+    console.log("Joined successfully", resp)
+    offset = resp.offset + Tone.now()
+  })
+  .receive("error", resp => { console.log("Unable to join", resp) })
 
 const sampler = new Tone.Sampler({
   urls: {
@@ -41,29 +51,36 @@ const sampler = new Tone.Sampler({
   baseUrl: "https://tonejs.github.io/audio/salamander/"
 }).toDestination();
 
-channel.on("noteon", payload => {
-  const { note, time } = payload
-  console.log({event: "recv:noteon", name: note.name, note, time})
-  sampler.triggerAttack(note.name, time, note.velocity)
-})
-
-channel.on("noteoff", payload => {
-  const { note, time } = payload
-  console.log({event: "recv:noteoff", name: note.name, note, time})
-  sampler.triggerRelease(note.name, time)
-})
-
 const pushNote = (eventSuffix) => {
   return (note) => {
-    const time = Tone.now()
     const event = "note" + eventSuffix
-    console.log({event: "push:" + event, name: note.name, note, time})
-    channel.push(event, {note, time})
+    const time = Tone.now() + offset
+    const params = {note, time}
+    console.log({push: {event, params}})
+    channel.push(event, params)
   }
 }
+
+const recvNote = (eventSuffix, callback) => {
+  return (params) => {
+    const event = "note" + eventSuffix
+    console.log({recv: {event, params}})
+    let { note, time } = params
+    time = time - offset
+    if (time < 0) {
+      return
+    }
+    callback(note.name, time, note.velocity)
+  }
+}
+
+channel.on("noteon", recvNote("on", sampler.triggerAttack.bind(sampler)))
+
+channel.on("noteoff", recvNote("off", sampler.triggerRelease.bind(sampler)))
 
 piano({
   parent: document.querySelector("#piano"),
   noteon: pushNote("on"),
   noteoff: pushNote("off"),
 });
+
