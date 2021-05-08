@@ -10,7 +10,19 @@
     "@tonejs/ui": "^0.1.5",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
-    "tone": "^14.7.77"
+    "tone": "^14.7.77",
+    "@material/mwc-icon": "^0.17.2",
+    "@material/mwc-slider": "^0.17.2",
+    "@tonejs/plot": "0.0.35",
+    "@types/node": "^14.0.23",
+    "audiokeys": "^0.1.1",
+    "color": "^3.1.2",
+    "deep-equal": "^2.0.3",
+    "file-loader": "^6.0.0",
+    "lit-element": "^2.3.1",
+    "lit-html": "^1.2.1",
+    "monaco-editor": "^0.20.0",
+    "webmidi": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -25,6 +37,12 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "terser-webpack-plugin": "^2.3.2",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^3.3.2",
+    "style-loader": "^1.2.1",
+    "to-string-loader": "^1.1.6",
+    "tone": "^14.7.28",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.9.7",
+    "worker-loader": "^2.0.0"
   }
 }

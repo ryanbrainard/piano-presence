@@ -25,6 +25,9 @@ module.exports = (env, options) => {
       publicPath: '/js/'
     },
     devtool: devMode ? 'eval-cheap-module-source-map' : undefined,
+    resolve: {
+      extensions: [".ts", ".js"],
+    },
     module: {
       rules: [
         {
@@ -33,6 +36,13 @@ module.exports = (env, options) => {
           use: {
             loader: 'babel-loader'
           }
+        },
+        {
+          test: /\.ts$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'ts-loader',
+          },
         },
         {
           test: /\.[s]?css$/,
